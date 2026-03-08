@@ -50,15 +50,26 @@ void loop() {
   {
     digitalWrite(whiteLED1, HIGH);
     digitalWrite(whiteLED2, HIGH);
-    if(digitalRead(button1) == 0); 
-  }
 
+    //The buttons use pull-up logic so their defualt state is HIGH (1). 
+    //When pressed their state will become LOW (0).
+    if(digitalRead(button1) == 0){
+      buttonPressed = true;
+      digitalWrite(whiteLED2, LOW);//Player 2's light turns off
+    }
+    else if(digitalRead(button2) == 0){
+      buttonPressed = true;
+      digitalWrite(whiteLED1, LOW);//Player 1's light turns off
+    }
+  }
+  delay(2000);//Long delay to rub in the loss
+  digitalWrite(whiteLED1, LOW);
+  digitalWrite(whiteLED2, LOW);
+  buttonPressed = 0;
   /*
   digitalWrite(buzzer, HIGH);
   delay(500);
   digitalWrtie(buzzer, LOw);
   */
-
-  if(button1)
 
 }
