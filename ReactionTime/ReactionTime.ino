@@ -34,42 +34,48 @@ void setup() {
 void loop() {
   //Initial traffic light LED sequence
   digitalWrite(greenLED, HIGH);
-  delay(1000);
+  digitalWrite(buzzer, HIGH);
+  delay(100);
+  digitalWrite(buzzer, LOW);
+  delay(900);
   digitalWrite(greenLED, LOW);
 
   digitalWrite(yellowLED, HIGH);
-  delay(1000);
+  digitalWrite(buzzer, HIGH);
+  delay(100);
+  digitalWrite(buzzer, LOW);
+  delay(900);
   digitalWrite(yellowLED, LOW);
 
   digitalWrite(redLED, HIGH);
-  delay(1000);
+  digitalWrite(buzzer, HIGH);
+  delay(100);
+  digitalWrite(buzzer, LOW);
+  delay(900);
   digitalWrite(redLED, LOW);
 
   //While neither button has been pressed white LEDs stay on.
-  while(!buttonPressed)
-  {
+  while (!buttonPressed) {
     digitalWrite(whiteLED1, HIGH);
     digitalWrite(whiteLED2, HIGH);
 
-    //The buttons use pull-up logic so their defualt state is HIGH (1). 
+    //The buttons use pull-up logic so their defualt state is HIGH (1).
     //When pressed their state will become LOW (0).
-    if(digitalRead(button1) == 0){
+    if (digitalRead(button1) == 0) {
       buttonPressed = true;
-      digitalWrite(whiteLED2, LOW);//Player 2's light turns off
-    }
-    else if(digitalRead(button2) == 0){
+      digitalWrite(whiteLED2, LOW);  //Player 2's light turns off
+    } else if (digitalRead(button2) == 0) {
       buttonPressed = true;
-      digitalWrite(whiteLED1, LOW);//Player 1's light turns off
+      digitalWrite(whiteLED1, LOW);  //Player 1's light turns off
     }
   }
-  delay(2000);//Long delay to rub in the loss
+
+  digitalWrite(buzzer, HIGH);
+  delay(500);
+  digitalWrite(buzzer, LOW);
+
+  delay(1500);  //Long delay to rub in the loss
   digitalWrite(whiteLED1, LOW);
   digitalWrite(whiteLED2, LOW);
   buttonPressed = 0;
-  /*
-  digitalWrite(buzzer, HIGH);
-  delay(500);
-  digitalWrtie(buzzer, LOw);
-  */
-
 }
