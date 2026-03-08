@@ -29,10 +29,14 @@ void setup() {
 
   pinMode(button1, INPUT_PULLUP);
   pinMode(button2, INPUT_PULLUP);
+
+  //Creating random number using noise from floating analog pin
+  //A0 is unconnected so its just picking up random electrical noise
+  randomSeed(analogRead(A0));
 }
 
 void loop() {
-  //Initial traffic light LED sequence
+  //Initial traffic light LED sequence. Buzzer sounds when each light turns on.
   digitalWrite(greenLED, HIGH);
   digitalWrite(buzzer, HIGH);
   delay(100);
@@ -51,7 +55,7 @@ void loop() {
   digitalWrite(buzzer, HIGH);
   delay(100);
   digitalWrite(buzzer, LOW);
-  delay(900);
+  delay(random(900,4901));
   digitalWrite(redLED, LOW);
 
   //While neither button has been pressed white LEDs stay on.
@@ -70,6 +74,7 @@ void loop() {
     }
   }
 
+  //Sound buzzer after one of the players wins
   digitalWrite(buzzer, HIGH);
   delay(500);
   digitalWrite(buzzer, LOW);
