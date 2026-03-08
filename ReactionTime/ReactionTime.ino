@@ -18,7 +18,12 @@ int button2 = 6;
 
 bool buttonPressed = false;
 
+unsigned long startTime = 0;
+unsigned long reactionTime = 0;
+
 void setup() {
+  Serial.begin(9600);
+
   pinMode(whiteLED1, OUTPUT);
   pinMode(greenLED, OUTPUT);
   pinMode(yellowLED, OUTPUT);
@@ -55,25 +60,37 @@ void loop() {
   digitalWrite(buzzer, HIGH);
   delay(100);
   digitalWrite(buzzer, LOW);
-  delay(random(900,4901));
+  delay(random(900, 4901));
   digitalWrite(redLED, LOW);
+
+
+  digitalWrite(whiteLED1, HIGH);
+  digitalWrite(whiteLED2, HIGH);
+  startTime = millis();
 
   //While neither button has been pressed white LEDs stay on.
   while (!buttonPressed) {
-    digitalWrite(whiteLED1, HIGH);
-    digitalWrite(whiteLED2, HIGH);
 
     //The buttons use pull-up logic so their defualt state is HIGH (1).
     //When pressed their state will become LOW (0).
-    if (digitalRead(button1) == 0) {
+    if (digitalRead(button1) == LOW) {
       buttonPressed = true;
-      digitalWrite(whiteLED2, LOW);  //Player 2's light turns off
-    } else if (digitalRead(button2) == 0) {
+      reactionTime = millis() - startTime;
+
+      digitalWrite(whiteLED2, LOW);  //Player 2's light turns of
+    } 
+    else if (digitalRead(button2) == LOW) {
       buttonPressed = true;
+      reactionTime = millis() - startTime;
+
       digitalWrite(whiteLED1, LOW);  //Player 1's light turns off
     }
   }
 
+  //Display Reaction Time
+  Serial.print("Reaction time: ");
+  Serial.print(reactionTime);
+  Serial.println(" ms");
   //Sound buzzer after one of the players wins
   digitalWrite(buzzer, HIGH);
   delay(500);
