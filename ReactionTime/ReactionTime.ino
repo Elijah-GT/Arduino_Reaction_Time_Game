@@ -60,44 +60,81 @@ void loop() {
   digitalWrite(buzzer, HIGH);
   delay(100);
   digitalWrite(buzzer, LOW);
-  delay(random(900, 4901));
-  digitalWrite(redLED, LOW);
 
+  unsigned long waitTime = random(900, 4901);
+  unsigned long start = millis();
+  bool falseStart = false;
 
-  digitalWrite(whiteLED1, HIGH);
-  digitalWrite(whiteLED2, HIGH);
-  startTime = millis();
-
-  //While neither button has been pressed white LEDs stay on.
-  while (!buttonPressed) {
-
-    //The buttons use pull-up logic so their defualt state is HIGH (1).
-    //When pressed their state will become LOW (0).
+  //While loop to detect false starts during the red button waiting phase
+  while (millis() - start < waitTime) {
     if (digitalRead(button1) == LOW) {
       buttonPressed = true;
-      reactionTime = millis() - startTime;
-
-      digitalWrite(whiteLED2, LOW);  //Player 2's light turns of
-    } 
-    else if (digitalRead(button2) == LOW) {
+      Serial.println("Player 1 false start!");
+      falseStart = true;
+      break;
+    } else if (digitalRead(button2) == LOW) {
       buttonPressed = true;
-      reactionTime = millis() - startTime;
-
-      digitalWrite(whiteLED1, LOW);  //Player 1's light turns off
+      Serial.println("Player 2 false start!");
+      falseStart = true;
+      break;
     }
   }
 
-  //Display Reaction Time
-  Serial.print("Reaction time: ");
-  Serial.print(reactionTime);
-  Serial.println(" ms");
-  //Sound buzzer after one of the players wins
-  digitalWrite(buzzer, HIGH);
-  delay(500);
-  digitalWrite(buzzer, LOW);
+  if (!falseStart) {
+    digitalWrite(redLED, LOW);
 
-  delay(1500);  //Long delay to rub in the loss
-  digitalWrite(whiteLED1, LOW);
-  digitalWrite(whiteLED2, LOW);
-  buttonPressed = 0;
+
+    digitalWrite(whiteLED1, HIGH);
+    digitalWrite(whiteLED2, HIGH);
+    startTime = millis();
+
+    //While neither button has been pressed white LEDs stay on.
+    while (!buttonPressed) {
+
+      //The buttons use pull-up logic so their default state is HIGH (1).
+      //When pressed their state will become LOW (0).
+      if (digitalRead(button1) == LOW) {
+        buttonPressed = true;
+        reactionTime = millis() - startTime;
+
+        digitalWrite(whiteLED2, LOW);  //Player 2's light turns off
+        Serial.println("Player 1 Wins!");
+      } 
+      else if (digitalRead(button2) == LOW) {
+        buttonPressed = true;
+        reactionTime = millis() - startTime;
+
+        digitalWrite(whiteLED1, LOW);  //Player 1's light turns off
+        Serial.println("Player 2 Wins!");
+      }
+    }
+
+    //Display Reaction Time
+    Serial.print("Reaction time: ");
+    Serial.print(reactionTime);
+    Serial.println(" ms");
+    //Sound buzzer after one of the players wins
+    digitalWrite(buzzer, HIGH);
+    delay(500);
+    digitalWrite(buzzer, LOW);
+
+    delay(1500);  //Long delay to rub in the loss
+    digitalWrite(whiteLED1, LOW);
+    digitalWrite(whiteLED2, LOW);
+  }
+
+  else{
+    digitalWrite(greenLED, HIGH);
+    digitalWrite(yellowLED, HIGH);
+    digitalWrite(redLED, HIGH);
+    digitalWrite(buzzer, HIGH);
+    delay(1000);
+    digitalWrite(greenLED, LOW);
+    digitalWrite(yellowLED, LOW);
+    digitalWrite(redLED, LOW);
+    digitalWrite(buzzer, LOW);
+    delay(500);
+  }
+  buttonPressed = false;
+
 }
