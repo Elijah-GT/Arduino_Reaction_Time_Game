@@ -5,4 +5,8 @@ Components: Arduino Uno
             Five 220Ohm resistors
             One active buzzer
             Two buttons
+##Photo            
+![IMG_0727](https://github.com/user-attachments/assets/63edade3-7c33-4990-97ac-302373ff57ed)
 
+## Demo Video
+https://www.youtube.com/watch?v=aDoK5tAs8JM
